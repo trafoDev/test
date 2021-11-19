@@ -1,0 +1,68 @@
+#include "pch.h"
+#include <iostream>
+
+
+long sumaWyrazow(long start, long stop)
+{
+    if (start >= stop) return stop;
+    return ((float)(start + stop)/2) * (stop - start + 1);
+}
+
+
+int main()
+{
+    long long liczbaIn;
+    long long silniaM = 1;
+    long long silniaM1 = 1;
+    long long liczba;
+    long long* table;
+    long long* tableM;
+    long long modulo=100;
+
+    std::cin >> liczbaIn;
+    std::cout << "Liczę dla liczby art ->" << liczbaIn << "\n\r";
+    liczba = liczbaIn - 1;
+
+    tableM = new long long[liczba];
+    for (int i = 3; i <= liczba+1; i++) {
+        silniaM = (silniaM * i) % modulo;
+        if (i == liczba) silniaM1 = silniaM;
+    }
+    std::cout << "silnaM:" << silniaM << "!\n";
+    std::cout << "silnaM1:" << silniaM1 << "!\n";
+
+    long long result = 0;
+    long counter = 0;
+    long minus = liczba;
+    long minusM = (minus * (-1)) % modulo;
+
+    for (int i = 0; i < liczba; i++) {
+        tableM[i] = (silniaM + silniaM1 * i) % modulo;
+        //std::cout << "TableM:" << tableM[i] << "!\n";
+    }
+
+    for (long x = 0; x <= liczba; x++) {
+        counter = 1;
+        //std::cout << "iteracja:" << x << " dotychczasowa suma:" << result << "!\n";
+        //std::cout << "odejmuję:" << minus << "!\n";
+
+        for (long y = 0; y < x; y++) {
+            long dzielnik = (liczba - counter + 1 > 0 ? liczba - counter + 1 : 1);
+            //std::cout << "Dodaję (no minus):" << (tableM[counter < liczba ? counter -1 : liczba - 1]) % modulo << "!!!!!!\n";
+            result = (result + tableM[counter < liczba ? counter - 1: liczba - 1]) % modulo;
+            counter++;
+        }
+
+        if (x < liczba - 1) {
+            for (long y = 1; y <= liczba + 1; y++) {
+                long dzielnik = (liczba - counter + 1 > 0 ? liczba - counter + 1 : 1);
+                //std::cout << "Dodaję:" << ((tableM[counter < liczba ? counter - 1 : liczba - 1] + minusM + modulo) % modulo) << "!!!!!!\n";
+                result = (result + tableM[counter < liczba ? counter - 1: liczba - 1] + minusM) % modulo;
+                counter++;
+            }
+        }
+        minus *= (liczba - x);
+        minusM = (minus * (-1)) % modulo;
+    }
+    std::cout << "wynik " << result;
+}
