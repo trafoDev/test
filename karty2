@@ -1,0 +1,68 @@
+void main2(long long liczbaIn, long long modulo)
+{
+    //long long liczbaIn;
+    long long silniaM = 1;
+    long long silniaM1 = 1;
+    long long liczba;
+    //long long* table;
+    long long* tableM;
+    //long long modulo = 100000;
+
+    //std::cin >> liczbaIn;
+    //std::cin >> modulo;
+    std::cout << "Liczę dla liczby art ->" << liczbaIn << "\n\r";
+    liczba = liczbaIn - 1;
+
+    tableM = new long long[liczba];
+    for (int i = 3; i <= liczba + 1; i++) {
+        silniaM = (silniaM * i) % modulo;
+        //std::cout << "Silnia M ->" << silniaM << "\n\r";
+        if (i == liczba) silniaM1 = silniaM;
+    }
+    std::cout << "silnaM:" << silniaM << "!\n";
+    std::cout << "silnaM1:" << silniaM1 << "!\n";
+
+    long long result = 0;
+    long long counter = 0;
+    long long minus = liczba;
+    long long minusM = (minus * (-1)) % modulo;
+
+    for (long long i = 0; i < liczba; i++) {
+        tableM[i] = (silniaM + silniaM1 * i) % modulo;
+        //std::cout << "TableM:" << tableM[i] << "!\n";
+    }
+
+    for (long long x = 0; x <= liczba; x++) {
+        counter = 1;
+        //std::cout << "minus--->:" << minus << "!\n";
+
+        //std::cout << "iteracja:" << x << " dotychczasowa suma:" << result << "!\n";
+        //std::cout << "odejmuję:" << minus << "!\n";
+
+        for (long long y = 0; y < x; y++) {
+            //long long dzielnik = (liczba - counter + 1 > 0 ? liczba - counter + 1 : 1);
+            //std::cout << "Dodaję (no minus):" << (tableM[counter < liczba ? counter -1 : liczba - 1]) % modulo << "!!!!!!\n";
+            result = (result + tableM[counter < liczba ? counter - 1 : liczba - 1]) % modulo;
+            //if( result < 0) result += modulo;
+            if (result < 0) std::cout << "--->:" << result << "!\n";
+            counter++;
+        }
+
+        if (x < liczba - 1) {
+            for (long long y = 1; y <= liczba + 1; y++) {
+                //long long dzielnik = (liczba - counter + 1 > 0 ? liczba - counter + 1 : 1);
+                //std::cout << "Dodaję:" << ((tableM[counter < liczba ? counter - 1 : liczba - 1] + minusM + modulo) % modulo) << "!!!!!!\n";
+               // if (tableM[counter < liczba ? counter - 1 : liczba - 1] != 0) {
+                    result = (result + tableM[counter < liczba ? counter - 1 : liczba - 1] + minusM + modulo) % modulo;
+                    //if (result < 0) result += modulo;
+                    if (result < 0) std::cout << "--->:" << result << "!\n";
+               // }
+                counter++;
+            }
+        }
+        minus = (minus * (liczba - x))% modulo;
+        minusM = (minus * (-1) + modulo) % modulo;
+//        std::cout << "minus--->:" << minus << "!\n";
+    }
+    std::cout << "wynik " << result << "!\n";
+}
