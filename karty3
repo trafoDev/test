@@ -1,0 +1,66 @@
+// ConsoleApplication1.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
+// 500 100 000 60000
+// 
+
+#include <iostream>
+
+void  main0(long long liczbaIn, long long modulo);
+void  main1(long long liczbaIn, long long modulo);
+void  main2(long long liczbaIn, long long modulo);
+void  main3(long long liczbaIn, long long modulo);
+
+int main()
+{
+    long long liczbaIn;
+    long long modulo = 100000;
+
+    std::cin >> liczbaIn;
+    std::cin >> modulo;
+    main3(liczbaIn, modulo);
+}
+
+void main3(long long liczbaIn, long long modulo)
+{
+    long long silniaM = 1;
+    long long silniaM1 = 1;
+    long long liczba;
+    long long* tableM;
+    long long* tableMinusM;
+
+    liczba = liczbaIn - 1;
+    tableM = new long long[liczba];
+    tableMinusM = new long long[liczba];
+    tableMinusM[0] = liczba;
+
+    for (int i = 1; i <= liczba + 1; i++) {
+        if (i != 2) {
+            silniaM = (silniaM * i) % modulo;
+            if (i == liczba) silniaM1 = silniaM;
+        }
+        if (i < liczba - 1) {
+            tableMinusM[i] = (((tableMinusM[i - 1] * (liczba - i + 1)) % modulo));
+        }
+        else {
+            tableMinusM[i] = 0;
+        }
+    }
+
+    for (long long i = 0; i < liczba; i++) {
+        tableM[i] = (silniaM + silniaM1 * i) % modulo;
+    }
+
+    long long razy = liczbaIn;
+    long long result = 0;
+    for (int i = 0; i <= liczba*2; i++) {
+        if (i >= liczba - 1) {
+            razy--;
+        } 
+
+        if (razy == 0) break;
+        result += (tableM[i < liczba ? i : liczba - 1] * razy) % modulo;
+        result += ((tableMinusM[i < liczba ? i : liczba - 1] * liczbaIn * ( - 1)) % modulo) + modulo ;
+        result = result % modulo;
+    }
+
+    std::cout << "Wynik" << result << "!\n";
+}
